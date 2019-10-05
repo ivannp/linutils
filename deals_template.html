@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+</head>
+<body>
+    {% for deal in deals %}
+    <div class="col-lg-6 col-lg-offset-3">
+        {{ deal.board }}<br />
+        {{ deal.hand.vul }}<br />
+        </p>
+        <table>
+            <tr>
+                <td></td>
+                <td>
+                    <img src="./artifacts/s.gif" alt="Table" /> {{ deal.hand.N.S }}
+                    <br><img src="./artifacts/h.gif" alt="Table" /> {{ deal.hand.N.H }}
+                    <br><img src="./artifacts/d.gif" alt="Table" /> {{ deal.hand.N.D }}
+                    <br><img src="./artifacts/c.gif" alt="Table" /> {{ deal.hand.N.C }}
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="./artifacts/s.gif" alt="Table" /> {{ deal.hand.W.S }}
+                    <br><img src="./artifacts/h.gif" alt="Table" /> {{ deal.hand.W.H }}
+                    <br><img src="./artifacts/d.gif" alt="Table" /> {{ deal.hand.W.D }}
+                    <br><img src="./artifacts/c.gif" alt="Table" /> {{ deal.hand.W.C }}
+                </td>
+                <td><img src="./artifacts/r.gif" alt="Table" /></td>
+                <td>
+                    <img src="./artifacts/s.gif" alt="Table" /> {{ deal.hand.E.S }}
+                    <br><img src="./artifacts/h.gif" alt="Table" /> {{ deal.hand.E.H }}
+                    <br><img src="./artifacts/d.gif" alt="Table" /> {{ deal.hand.E.D }}
+                    <br><img src="./artifacts/c.gif" alt="Table" /> {{ deal.hand.E.C }}
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <img src="./artifacts/s.gif" alt="Table" /> {{ deal.hand.S.S }}
+                    <br><img src="./artifacts/h.gif" alt="Table" /> {{ deal.hand.S.H }}
+                    <br><img src="./artifacts/d.gif" alt="Table" /> {{ deal.hand.S.D }}
+                    <br><img src="./artifacts/c.gif" alt="Table" /> {{ deal.hand.S.C }}
+                </td>
+                <td></td>
+            </tr>
+        </table>
+        <br />
+        <table>
+            <tr><td>West</td><td>North</td><td>East</td><td>South</td></tr>
+            {% set vars = namespace({'colid': 0}) %}
+            {% for bid in deal.hand.bids %}
+                {% if vars.colid == 4 %}
+                    {% set vars.colid = 0 %}
+                {% endif %}
+                {% if vars.colid == 0 %}
+                    <tr>
+                {% endif %}
+                <td>
+                {% if bid|length == 2 %}
+                    {% if bid.endswith('C') %}
+                        {{ bid[:1] }}<img src="./artifacts/c.gif" alt="Table" />
+                    {% elif bid.endswith('D') %}
+                        {{ bid[:1] }}<img src="./artifacts/d.gif" alt="Table" />
+                    {% elif bid.endswith('H') %}
+                        {{ bid[:1] }}<img src="./artifacts/h.gif" alt="Table" />
+                    {% elif bid.endswith('S') %}
+                        {{ bid[:1] }}<img src="./artifacts/s.gif" alt="Table" />
+                    {% else %}
+                        {{ bid }}
+                    {% endif %}
+                {% else %}
+                    {{ bid }}
+                {% endif %}
+                </td>
+                {% set vars.colid = vars.colid + 1 %}
+                {% if vars.colid == 4 %}
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+        <table>
+            <tr><th>Trick</th><th>Leader</th><th>Lead</th><th>2nd</th><th>3rd</th><th>4th</th></tr>
+            {% set vars = namespace({'trickid': 1}) %}
+            {% for trick in deal.hand.play %}
+            <tr>
+                <td>{{ vars.trickid }}</td>
+                <td>{{ trick.lead }}</td>
+                {% for card in trick.cards %}
+                    <td>
+                        {% if card.endswith('C') %}
+                            <img src="./artifacts/c.gif" alt="Table" />{{ card[:1] }}
+                        {% elif card.endswith('D') %}
+                            <img src="./artifacts/d.gif" alt="Table" />{{ card[:1] }}
+                        {% elif card.endswith('H') %}
+                            <img src="./artifacts/h.gif" alt="Table" />{{ card[:1] }}
+                        {% elif card.endswith('S') %}
+                            <img src="./artifacts/s.gif" alt="Table" />{{ card[:1] }}
+                        {% endif %}
+                    </td>
+                {% endfor %}
+            </tr>
+            {% set vars.trickid = vars.trickid + 1 %}
+            {% endfor %}
+        </table>
+    </div>
+    {% endfor %}
+</body>
+</html>
